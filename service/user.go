@@ -134,7 +134,7 @@ func handlerLogin(w http.ResponseWriter, r *http.Request) {
 }
 
 func handlerSignup(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Received one login request")
+	fmt.Println("Received one signup request")
 	w.Header().Set("Content-Type", "text/plain")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
