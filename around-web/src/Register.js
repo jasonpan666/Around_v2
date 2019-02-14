@@ -14,7 +14,7 @@ class RegistrationForm extends React.Component {
       if (!err) {
         console.log('Received values of form: ', values);
         // send request
-        fetch(`${API_ROOT}/signup`, {
+        fetch('https://around-75015.appspot.com/api/v1/signup', {
           method: 'POST',
           body: JSON.stringify({
             username: values.username,
