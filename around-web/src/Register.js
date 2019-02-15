@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Form, Input, Button, message } from 'antd';
+import { API_ROOT } from './constants';
 
 class RegistrationForm extends React.Component {
   state = {
@@ -14,7 +15,7 @@ class RegistrationForm extends React.Component {
       if (!err) {
         console.log('Received values of form: ', values);
         // send request
-        fetch('https://around-75015.appspot.com/api/v1/signup', {
+        fetch(`${API_ROOT}/signup`, {
           method: 'POST',
           body: JSON.stringify({
             username: values.username,

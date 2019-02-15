@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Form, Icon, Input, Button, message } from 'antd';
+import { API_ROOT } from './constants';
 
 class NormalLoginForm extends React.Component {
   handleSubmit = (e) => {
@@ -8,7 +9,7 @@ class NormalLoginForm extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
-        fetch('https://around-75015.appspot.com/api/v1/login', {
+        fetch(`${API_ROOT}/login`, {
           method: 'POST',
           body: JSON.stringify({
             username: values.username,
