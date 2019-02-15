@@ -5,13 +5,11 @@
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 50px;
+  float: left;
 }
 
 .App-header {
   background-color: #282c34;
-  display: flex;
-  align-items: center;
-  font-size: calc(10px + 2vmin);
   color: white;
   height: 50px;
 }
@@ -20,6 +18,8 @@
   color: #61dafb;
   font-size: 20px;
   font-weight: 600;
+  float: left;
+  padding-top: 10px;
 }
 
 .App-link {

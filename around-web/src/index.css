@@ -3,6 +3,7 @@
 @import 'styles/Register.css';
 @import 'styles/Main.css';
 @import 'styles/Login.css';
+@import 'styles/TopBar.css';
 
 body {
   margin: 0;
