@@ -28,7 +28,7 @@ class RegistrationForm extends React.Component {
         })
           .then((data) => {
             console.log(data);
-            message.success('Registration Succeed!');
+            message.success('Registration Success!');
           })
           .catch((e) => {
             console.log(e);
@@ -46,7 +46,7 @@ class RegistrationForm extends React.Component {
   compareToFirstPassword = (rule, value, callback) => {
     const form = this.props.form;
     if (value && value !== form.getFieldValue('password')) {
-      callback('Two passwords that you enter is inconsistent!');
+      callback('Two passwords that you enter are inconsistent!');
     } else {
       callback();
     }

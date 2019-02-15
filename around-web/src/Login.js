@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Form, Icon, Input, Button } from 'antd';
+import { Form, Icon, Input, Button, message } from 'antd';
 
 class NormalLoginForm extends React.Component {
   handleSubmit = (e) => {
@@ -8,6 +8,24 @@ class NormalLoginForm extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
+        fetch('https://around-75015.appspot.com/api/v1/login', {
+          method: 'POST',
+          body: JSON.stringify({
+            username: values.username,
+            password: values.password,
+          }),
+        }).then((response) => {
+          if (response.ok) {
+            return response.text();
+          }
+          throw new Error(response.statusText);
+        }).then((data) => {
+          console.log(data);
+          message.success('Login Success!');
+        }).catch((e) => {
+          console.log(e);
+          message.error('Login Failed.');
+        });
       }
     });
   }
@@ -17,7 +35,7 @@ class NormalLoginForm extends React.Component {
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
         <Form.Item>
-          {getFieldDecorator('userName', {
+          {getFieldDecorator('username', {
             rules: [{ required: true, message: 'Please input your username!' }],
           })(
             <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
@@ -25,7 +43,7 @@ class NormalLoginForm extends React.Component {
         </Form.Item>
         <Form.Item>
           {getFieldDecorator('password', {
-            rules: [{ required: true, message: 'Please input your Password!' }],
+            rules: [{ required: true, message: 'Please input your password!' }],
           })(
             <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />
           )}
