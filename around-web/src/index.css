@@ -1,8 +1,8 @@
-@import '~antd/dist/antd.css';
-@import './App.css';
-@import './Register.css';
-@import './Main.css';
-@import './Login.css';
+@import '../node_modules/antd/dist/antd.css';
+@import 'styles/App.css';
+@import 'styles/Register.css';
+@import 'styles/Main.css';
+@import 'styles/Login.css';
 
 body {
   margin: 0;
