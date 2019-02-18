@@ -1,28 +1,63 @@
 import React from 'react';
-import { Tabs, Button } from 'antd';
+import { Tabs, Button, Spin } from 'antd';
 import { GEO_OPTIONS } from '../constants';
 
 const TabPane = Tabs.TabPane;
 
 export class Home extends React.Component {
+  // get user location           > ERROR
+  // (isLoadingGeoLocation: false)
+  //           V
+  // waiting for user location   > ERROR
+  // (isLoadingGeoLocation: true)
+  //           V
+  // browser return user location
+  // (isLoadingGeoLocation: false)
+
+  state = {
+    isLoadingGeoLocation: false,
+    error: ''
+  }
+
   componentDidMount() {
     if ('geolocation' in navigator) {
+      this.setState({
+        isLoadingGeoLocation: true,
+        error: ''
+      });
       navigator.geolocation.getCurrentPosition(
         this.onSuccessLoadGeoLocation,
         this.onFailedLoadGeoLocation,
         GEO_OPTIONS
       );
     } else {
-      // TODO: Error handling
+      this.setState({error: 'Geolocation is not supported.'});
     }
   }
 
   onSuccessLoadGeoLocation = (position) => {
+    this.setState({
+      isLoadingGeoLocation: false
+    });
     console.log('success', position);
   }
 
   onFailedLoadGeoLocation = (error) => {
-    console.log('error', error);
+    this.setState({
+      isLoadingGeoLocation: false,
+      error: 'Failed to load geolocation: ' + error.message
+    });
+  }
+
+  getImagePost = () => {
+    const { error, isLoadingGeoLocation } = this.state;
+    if (error) {
+      return <div>{error}</div>;
+    } else if (isLoadingGeoLocation) {
+      return <Spin tip="Loading geolocation..."/>;
+    } else {
+      return <div>Nothing to show</div>
+    }
   }
 
   render() {
@@ -31,9 +66,7 @@ export class Home extends React.Component {
     return (
       <Tabs className="main-tabs" tabBarExtraContent={operations}>
         <TabPane tab="Image Posts" key="1">
-          <div>
-            <h1>hello world</h1>
-          </div>
+          {this.getImagePost()}
         </TabPane>
         <TabPane tab="Video Posts" key="2">Content of tab 2</TabPane>
         <TabPane tab="Map" key="3">Content of tab 3</TabPane>
