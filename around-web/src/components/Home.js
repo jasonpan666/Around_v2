@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tabs, Button, Spin } from 'antd';
-import { GEO_OPTIONS } from '../constants';
+import { GEO_OPTIONS, POS_KEY } from '../constants';
 
 const TabPane = Tabs.TabPane;
 
@@ -36,10 +36,15 @@ export class Home extends React.Component {
   }
 
   onSuccessLoadGeoLocation = (position) => {
+    const { latitude, longitude } = position.coords;
+    localStorage.setItem(POS_KEY, JSON.stringify({
+      lat: latitude,
+      lon: longitude
+    }));
     this.setState({
-      isLoadingGeoLocation: false
+      isLoadingGeoLocation: false,
+      error:''
     });
-    console.log('success', position);
   }
 
   onFailedLoadGeoLocation = (error) => {
