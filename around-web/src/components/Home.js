@@ -1,6 +1,7 @@
 import React from 'react';
 import { Tabs, Button, Spin } from 'antd';
 import { GEO_OPTIONS, POS_KEY, API_ROOT, AUTH_HEADER, TOKEN_KEY } from '../constants';
+import { Gallery } from './Gallery';
 
 const TabPane = Tabs.TabPane;
 
@@ -42,19 +43,19 @@ export class Home extends React.Component {
         GEO_OPTIONS
       );
     } else {
-      this.setState({error: 'Geolocation is not supported.'});
+      this.setState({error: 'Geolocation is not supported'});
     }
   }
 
   onSuccessLoadGeoLocation = (position) => {
+    console.log(position);
     const { latitude, longitude } = position.coords;
     localStorage.setItem(POS_KEY, JSON.stringify({
       lat: latitude,
       lon: longitude
     }));
     this.setState({
-      isLoadingGeoLocation: false,
-      error:''
+      isLoadingGeoLocation: false
     });
     this.loadNearbyPosts();
   }
@@ -100,7 +101,17 @@ export class Home extends React.Component {
     } else if (isLoadingPosts) {
       return <Spin tip="Loading posts..."/>;
     } else if (posts && posts.length > 0) {
-      return <div> { JSON.stringify(posts) } </div>
+      const images = this.state.posts.map((post) => {
+        return {
+          user: post.user,
+          src: post.url,
+          thumbnail: post.url,
+          caption: post.message,
+          thumbnailWidth: 400,
+          thumbnailHeight: 300,
+        }
+      });
+      return (<Gallery images={images}/>);
     } else {
       return <div>No nearby posts</div>
     }
