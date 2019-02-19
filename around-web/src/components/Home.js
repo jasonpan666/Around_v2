@@ -56,6 +56,7 @@ export class Home extends React.Component {
       isLoadingGeoLocation: false,
       error:''
     });
+    this.loadNearbyPosts();
   }
 
   onFailedLoadGeoLocation = (error) => {
@@ -68,7 +69,9 @@ export class Home extends React.Component {
   loadNearbyPosts = () => {
     const { lat, lon } = JSON.parse(localStorage.getItem(POS_KEY));
     const token = localStorage.getItem(TOKEN_KEY);
+
     this.setState({ isLoadingPosts: true, error: '' });
+
     fetch(`${API_ROOT}/search?lat=${lat}&lon=${lon}&range=20000`, {
       method: 'GET',
       headers: {
@@ -78,7 +81,7 @@ export class Home extends React.Component {
       if (response.ok) {
         return response.json();
       }
-      throw new Error('Failed to load posts.');
+      throw new Error('Failed to load posts. Error: ' + response.statusText);
     }).then((data) => {
       console.log(data);
       this.setState({ isLoadingPosts: false, posts: data ? data : [] });
@@ -89,13 +92,17 @@ export class Home extends React.Component {
   }
 
   getImagePost = () => {
-    const { error, isLoadingGeoLocation } = this.state;
+    const { error, isLoadingGeoLocation, isLoadingPosts, posts } = this.state;
     if (error) {
       return <div>{error}</div>;
     } else if (isLoadingGeoLocation) {
       return <Spin tip="Loading geolocation..."/>;
+    } else if (isLoadingPosts) {
+      return <Spin tip="Loading posts..."/>;
+    } else if (posts && posts.length > 0) {
+      return <div> { JSON.stringify(posts) } </div>
     } else {
-      return <div>Nothing to show</div>
+      return <div>No nearby posts</div>
     }
   }
 
