@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tabs, Button, Spin } from 'antd';
-import { GEO_OPTIONS, POS_KEY } from '../constants';
+import { GEO_OPTIONS, POS_KEY, API_ROOT, AUTH_HEADER, TOKEN_KEY } from '../constants';
 
 const TabPane = Tabs.TabPane;
 
@@ -13,10 +13,21 @@ export class Home extends React.Component {
   //           V
   // browser return user location
   // (isLoadingGeoLocation: false)
+  //           V
+  // hit API
+  // (isLoadingPosts: false)
+  //           V
+  // waiting for API response
+  // (isLoadingPosts: true)
+  //           V
+  // return API response
+  // (isLoadingPosts: false)
 
   state = {
     isLoadingGeoLocation: false,
-    error: ''
+    error: '',
+    isLoadingPosts: false,
+    posts: []
   }
 
   componentDidMount() {
@@ -51,6 +62,29 @@ export class Home extends React.Component {
     this.setState({
       isLoadingGeoLocation: false,
       error: 'Failed to load geolocation: ' + error.message
+    });
+  }
+
+  loadNearbyPosts = () => {
+    const { lat, lon } = JSON.parse(localStorage.getItem(POS_KEY));
+    const token = localStorage.getItem(TOKEN_KEY);
+    this.setState({ isLoadingPosts: true, error: '' });
+    fetch(`${API_ROOT}/search?lat=${lat}&lon=${lon}&range=20000`, {
+      method: 'GET',
+      headers: {
+        Authorization: `${AUTH_HEADER} ${token}`,
+      },
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error('Failed to load posts.');
+    }).then((data) => {
+      console.log(data);
+      this.setState({ isLoadingPosts: false, posts: data ? data : [] });
+    }).catch((e) => {
+      console.log(e.message);
+      this.setState({ isLoadingPosts: false, error: e.message });
     });
   }
 

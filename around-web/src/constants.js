@@ -6,3 +6,4 @@ export const GEO_OPTIONS = {
   timeout           : 27000
 };
 export const POS_KEY = 'POS_KEY';
+export const AUTH_HEADER = 'Bearer';
