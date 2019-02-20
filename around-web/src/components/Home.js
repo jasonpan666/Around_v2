@@ -142,6 +142,22 @@ export class Home extends React.Component {
         })}
       </Row>
     );
+
+    /* flex display
+    return (
+      <div style={{display: 'flex', 'flex-flow': 'row wrap'}}>
+        {
+          this.state.posts.filter((post) => post.type === 'video').map((post) => {
+            return (
+              <div>
+                <video src={post.url} controls className="video-block"/>
+                <p>{post.user}: {post.message}</p>
+              </div>
+            );
+        })}
+      </div>
+    );
+    */
   }
 
   onTopicChange = (e) => {
