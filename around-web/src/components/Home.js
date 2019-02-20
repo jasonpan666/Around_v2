@@ -3,6 +3,7 @@ import { Tabs, Spin, Row, Col } from 'antd';
 import { GEO_OPTIONS, POS_KEY, API_ROOT, AUTH_HEADER, TOKEN_KEY } from '../constants';
 import { Gallery } from './Gallery';
 import { CreatePostButton } from './CreatePostButton';
+import { AroundMap } from './AroundMap';
 
 const TabPane = Tabs.TabPane;
 
@@ -151,7 +152,15 @@ export class Home extends React.Component {
         <TabPane tab="Video Posts" key="2">
           {this.getPanelContent("video")}
         </TabPane>
-        <TabPane tab="Map" key="3">Content of tab 3</TabPane>
+        <TabPane tab="Map" key="3">
+          <AroundMap
+            googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3CEh9DXuyjozqptVB5LA-dN7MxWWkr9s&v=3.exp&libraries=geometry,drawing,places"
+            loadingElement={<div style={{ height: `100%` }} />}
+            containerElement={<div style={{ height: `800px` }} />}
+            mapElement={<div style={{ height: `100%` }} />}
+            posts={this.state.posts}
+          />
+        </TabPane>
       </Tabs>
     );
   }
