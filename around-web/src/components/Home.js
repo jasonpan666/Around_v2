@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tabs, Spin } from 'antd';
+import { Tabs, Spin, Row, Col } from 'antd';
 import { GEO_OPTIONS, POS_KEY, API_ROOT, AUTH_HEADER, TOKEN_KEY } from '../constants';
 import { Gallery } from './Gallery';
 import { CreatePostButton } from './CreatePostButton';
@@ -93,16 +93,25 @@ export class Home extends React.Component {
     });
   }
 
-  getImagePost = () => {
+  getPanelContent = (type) => {
     const { error, isLoadingGeoLocation, isLoadingPosts, posts } = this.state;
     if (error) {
-      return <div>{error}</div>;
-    } else if (isLoadingGeoLocation) {
-      return <Spin tip="Loading geo location..."/>;
+      return <div>{error}</div>
+    } else if(isLoadingGeoLocation) {
+      return <Spin tip="Loading geo location..."/>
     } else if (isLoadingPosts) {
-      return <Spin tip="Loading posts..."/>;
-    } else if (posts && posts.length > 0) {
-      const images = this.state.posts.map((post) => {
+      return <Spin tip="Loading posts..." />
+    } else if (posts.length > 0) {
+      return type === 'image' ? this.getImagePosts() : this.getVideoPosts();
+    } else {
+      return 'No nearby posts.';
+    }
+  }
+
+  getImagePosts = () => {
+    const images = this.state.posts
+      .filter((post) => post.type === 'image')
+      .map((post) => {
         return {
           user: post.user,
           src: post.url,
@@ -112,10 +121,23 @@ export class Home extends React.Component {
           thumbnailHeight: 300,
         }
       });
-      return (<Gallery images={images}/>);
-    } else {
-      return <div>No nearby posts</div>
-    }
+
+    return (<Gallery images={images}/>);
+  }
+
+  getVideoPosts = () => {
+    return (
+      <Row gutter={32}>
+        {this.state.posts.filter((post) => post.type === 'video').map((post) => {
+          return (
+            <Col span={6} key={post.url}>
+              <video src={post.url} controls className="video-block"/>
+              <p>{post.user}: {post.message}</p>
+            </Col>
+          );
+        })}
+      </Row>
+    );
   }
 
   render() {
@@ -124,9 +146,11 @@ export class Home extends React.Component {
     return (
       <Tabs className="main-tabs" tabBarExtraContent={operations}>
         <TabPane tab="Image Posts" key="1">
-          {this.getImagePost()}
+          {this.getPanelContent("image")}
         </TabPane>
-        <TabPane tab="Video Posts" key="2">Content of tab 2</TabPane>
+        <TabPane tab="Video Posts" key="2">
+          {this.getPanelContent("video")}
+        </TabPane>
         <TabPane tab="Map" key="3">Content of tab 3</TabPane>
       </Tabs>
     );
