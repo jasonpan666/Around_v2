@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Button, message } from 'antd';
 import { CreatePostForm } from './CreatePostForm';
-import { POS_KEY, API_ROOT, AUTH_HEADER, TOKEN_KEY } from '../constants';
+import { POS_KEY, API_ROOT, AUTH_HEADER, TOKEN_KEY, LOC_SHAKE } from '../constants';
 
 export class CreatePostButton extends React.Component {
   state = {
@@ -22,8 +22,8 @@ export class CreatePostButton extends React.Component {
         const { lat, lon } = JSON.parse(localStorage.getItem(POS_KEY));
         const token = localStorage.getItem(TOKEN_KEY);
         const formData = new FormData();
-        formData.set('lat', lat);
-        formData.set('lon', lon);
+        formData.set('lat', lat + LOC_SHAKE * Math.random() * 2 - LOC_SHAKE);
+        formData.set('lon', lon + LOC_SHAKE * Math.random() * 2 - LOC_SHAKE);
         formData.set('message', values.message);
         formData.set('image', values.image[0].originFileObj);
 
