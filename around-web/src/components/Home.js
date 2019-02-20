@@ -1,29 +1,30 @@
 import React from 'react';
-import { Tabs, Button, Spin } from 'antd';
+import { Tabs, Spin } from 'antd';
 import { GEO_OPTIONS, POS_KEY, API_ROOT, AUTH_HEADER, TOKEN_KEY } from '../constants';
 import { Gallery } from './Gallery';
+import { CreatePostButton } from './CreatePostButton';
 
 const TabPane = Tabs.TabPane;
 
-export class Home extends React.Component {
-  // get user location           > ERROR
-  // (isLoadingGeoLocation: false)
-  //           V
-  // waiting for user location   > ERROR
-  // (isLoadingGeoLocation: true)
-  //           V
-  // browser return user location
-  // (isLoadingGeoLocation: false)
-  //           V
-  // hit API
-  // (isLoadingPosts: false)
-  //           V
-  // waiting for API response
-  // (isLoadingPosts: true)
-  //           V
-  // return API response
-  // (isLoadingPosts: false)
+// get user location           > ERROR
+// (isLoadingGeoLocation: false)
+//           V
+// waiting for user location   > ERROR
+// (isLoadingGeoLocation: true)
+//           V
+// browser return user location
+// (isLoadingGeoLocation: false)
+//           V
+// hit API
+// (isLoadingPosts: false)
+//           V
+// waiting for API response
+// (isLoadingPosts: true)
+//           V
+// return API response
+// (isLoadingPosts: false)
 
+export class Home extends React.Component {
   state = {
     isLoadingGeoLocation: false,
     error: '',
@@ -97,7 +98,7 @@ export class Home extends React.Component {
     if (error) {
       return <div>{error}</div>;
     } else if (isLoadingGeoLocation) {
-      return <Spin tip="Loading geolocation..."/>;
+      return <Spin tip="Loading geo location..."/>;
     } else if (isLoadingPosts) {
       return <Spin tip="Loading posts..."/>;
     } else if (posts && posts.length > 0) {
@@ -118,7 +119,7 @@ export class Home extends React.Component {
   }
 
   render() {
-    const operations = <Button type="primary">Create New Post</Button>;
+    const operations = <CreatePostButton loadNearbyPosts={this.loadNearbyPosts}/>;
 
     return (
       <Tabs className="main-tabs" tabBarExtraContent={operations}>

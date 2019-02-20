@@ -59,3 +59,14 @@ class NormalCreatePostForm extends React.Component {
 }
 
 export const CreatePostForm = Form.create()(NormalCreatePostForm);
+
+
+/*
+Form.create() ---> High Order Component (function: component -> component)
+
+Form.create()(NormalCreatePostForm) ---> HOC (Form.create()(NormalCreateForm))
+
+<HOC>
+  <NormalCreatePostForm form={{validateFields: func}} />
+</HOC>
+*/

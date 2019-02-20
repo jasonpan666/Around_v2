@@ -5,7 +5,6 @@ import { POS_KEY, API_ROOT, AUTH_HEADER, TOKEN_KEY } from '../constants';
 
 export class CreatePostButton extends React.Component {
   state = {
-    ModalText: 'Content of the modal',
     visible: false,
     confirmLoading: false,
   }
@@ -29,6 +28,7 @@ export class CreatePostButton extends React.Component {
         formData.set('image', values.image[0].originFileObj);
 
         this.setState({ confirmLoading: true });
+
         fetch(`${API_ROOT}/post`, {
           method: 'POST',
           body: formData,
@@ -42,12 +42,11 @@ export class CreatePostButton extends React.Component {
             return this.props.loadNearbyPosts();
           }
           throw new Error(response.statusText);
-        })
-          .then(() => message.success('Post created successfully!'))
+        }).then(() => message.success('Post created successfully!'))
           .catch((e) => {
             console.log(e);
             this.setState({ confirmLoading: false });
-            message.error('Failed to create the post.');
+            message.error('Failed to create the post');
           });
       }
     });
